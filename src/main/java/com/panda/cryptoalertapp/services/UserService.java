@@ -14,4 +14,8 @@ public class UserService {
     public void saveUser(String username, String email, String password) {
         userRepository.save(new User(username, email, password));
     }
+
+    public User findUserById(int id) {
+        return userRepository.findById(id).orElse(null);
+    }
 }
