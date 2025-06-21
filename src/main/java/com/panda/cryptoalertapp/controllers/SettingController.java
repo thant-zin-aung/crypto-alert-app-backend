@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SettingController {
-    private UserService userService;
-    private SettingService settingService;
+    private final UserService userService;
+    private final SettingService settingService;
 
     public SettingController(UserService userService, SettingService settingService) {
         this.userService = userService;
