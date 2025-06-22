@@ -16,14 +16,16 @@ public class SettingService {
         this.settingRepository = settingRepository;
         this.telegramService = new TelegramService();
     }
-    public void saveSetting(String tgBotToken, double targetPrice, boolean isTargetUp, boolean isTargetHit, User settingOwner) throws Exception {
+    public void saveSetting(String tgBotToken, double targetPrice, boolean isTargetUp, User settingOwner) throws Exception {
         Optional<Long> tgChatId = telegramService.getLatestChatId(tgBotToken);
         if(tgChatId.isPresent()) {
-            settingRepository.save(new Setting(tgBotToken, tgChatId.get(), targetPrice, isTargetUp, isTargetHit, settingOwner));
+            settingRepository.save(new Setting(tgBotToken, tgChatId.get(), targetPrice, isTargetUp, false, settingOwner));
         } else {
             throw new Exception("Telegram chat id cannot be retrieved. Make sure to send at least one message to telegram bot.");
         }
-
+    }
+    public void updateSetting(Setting setting) throws Exception {
+        settingRepository.save(setting);
     }
 
     public List<Setting> getAllSetting() {

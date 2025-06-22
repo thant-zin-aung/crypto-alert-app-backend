@@ -22,10 +22,10 @@ public class SettingController {
     }
 
     @PostMapping("/saveSetting")
-    public ResponseEntity<Object> saveNewSetting(@RequestParam String tgBotToken, @RequestParam double targetPrice, @RequestParam boolean isTargetUp, @RequestParam boolean isTargetHit, @RequestParam int settingOwnerId) {
+    public ResponseEntity<Object> saveNewSetting(@RequestParam String tgBotToken, @RequestParam double targetPrice, @RequestParam boolean isTargetUp, @RequestParam int settingOwnerId) {
         User settingOwner = userService.findUserById(settingOwnerId);
         try {
-            settingService.saveSetting(tgBotToken, targetPrice, isTargetUp, isTargetHit, settingOwner);
+            settingService.saveSetting(tgBotToken, targetPrice, isTargetUp, settingOwner);
             return ResponseEntity.ok("New setting saved successfully...");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));

@@ -27,11 +27,16 @@ public class PriceCheckService {
     @Scheduled(fixedRate = 1000)
     public void checkPriceAndNotify() {
         double currentPrice = fetchCurrentBTCPrice();
-        listOfSetting.stream().forEach(setting -> {
+        listOfSetting.forEach(setting -> {
             if((setting.getTargetPrice() < currentPrice && setting.isTargetUp() && !setting.isTargetHit()) ||
                     setting.getTargetPrice() > currentPrice && !setting.isTargetUp() && !setting.isTargetHit()) {
-//                System.out.println("Send noti to this bot: "+setting.getTgBotToken());
                 sendTelegramMessage(setting.getTgBotToken(), String.valueOf(setting.getTgChatId()), currentPrice);
+                setting.setTargetHit(true);
+                try {
+                    settingService.updateSetting(setting);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }
