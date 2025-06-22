@@ -8,6 +8,7 @@ public class Setting {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int sid;
     private String tgBotToken;
+    private String tgChatId;
     private double targetPrice;
     private boolean isTargetUp;
     private boolean isTargetHit;
@@ -31,6 +32,14 @@ public class Setting {
 
     public void setTgBotToken(String tgBotToken) {
         this.tgBotToken = tgBotToken;
+    }
+
+    public String getTgChatId() {
+        return tgChatId;
+    }
+
+    public void setTgChatId(String tgChatId) {
+        this.tgChatId = tgChatId;
     }
 
     public double getTargetPrice() {
