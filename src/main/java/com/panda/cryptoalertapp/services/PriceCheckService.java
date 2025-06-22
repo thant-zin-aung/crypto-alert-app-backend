@@ -31,7 +31,7 @@ public class PriceCheckService {
             if((setting.getTargetPrice() < currentPrice && setting.isTargetUp() && !setting.isTargetHit()) ||
                     setting.getTargetPrice() > currentPrice && !setting.isTargetUp() && !setting.isTargetHit()) {
 //                System.out.println("Send noti to this bot: "+setting.getTgBotToken());
-                sendTelegramMessage(setting.getTgBotToken().split(":")[1], setting.getTgBotToken().split(":")[0], currentPrice);
+                sendTelegramMessage(setting.getTgBotToken(), String.valueOf(setting.getTgChatId()), currentPrice);
             }
         });
     }
