@@ -1,6 +1,8 @@
 package com.panda.cryptoalertapp.services;
 
+import com.panda.cryptoalertapp.entities.AlertType;
 import com.panda.cryptoalertapp.entities.Setting;
+import com.panda.cryptoalertapp.entities.Telegram;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -30,7 +32,12 @@ public class PriceCheckService {
         listOfSetting.forEach(setting -> {
             if((setting.getTargetPrice() < currentPrice && setting.isTargetUp() && !setting.isTargetHit()) ||
                     setting.getTargetPrice() > currentPrice && !setting.isTargetUp() && !setting.isTargetHit()) {
-                sendTelegramMessage(setting.getTgBotToken(), String.valueOf(setting.getTgChatId()), currentPrice);
+//                sendTelegramMessage(setting.getTgBotToken(), String.valueOf(setting.getTgChatId()), currentPrice);
+                setting.getAlertTypes().forEach(alertType -> {
+                    if(alertType instanceof Telegram telegram) {
+                        sendTelegramMessage(telegram.getBotToken(), String.valueOf(telegram.getChatId()), currentPrice);
+                    }
+                });
                 setting.setTargetHit(true);
                 try {
                     settingService.updateSetting(setting);
