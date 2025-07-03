@@ -13,8 +13,10 @@ public class User {
     private String username;
     private String email;
     private String password;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Setting> settings;
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<AlertType> alertTypes;
 
     public User() {
     }
@@ -55,5 +57,9 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void addAlertType(AlertType alertType) {
+        alertTypes.add(alertType);
     }
 }

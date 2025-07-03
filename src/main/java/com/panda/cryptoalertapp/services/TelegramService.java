@@ -2,14 +2,23 @@ package com.panda.cryptoalertapp.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.panda.cryptoalertapp.entities.Telegram;
+import com.panda.cryptoalertapp.repositories.TelegramRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
+@Service
 public class TelegramService {
+    private final TelegramRepository telegramRepository;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public TelegramService(TelegramRepository telegramRepository) {
+        this.telegramRepository = telegramRepository;
+    }
 
     public Optional<Long> getLatestChatId(String botToken) {
         String url = String.format("https://api.telegram.org/bot%s/getUpdates", botToken);
@@ -38,5 +47,9 @@ public class TelegramService {
         }
 
         return Optional.empty(); // Not found or error
+    }
+
+    public void saveTelegram(Telegram telegram) {
+        telegramRepository.save(telegram);
     }
 }

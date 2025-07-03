@@ -20,4 +20,8 @@ public record UserService(UserRepository userRepository) {
     public User findUserById(int id) {
         return userRepository.findById(id).orElse(null);
     }
+
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
 }

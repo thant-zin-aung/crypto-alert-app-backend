@@ -12,9 +12,9 @@ import java.util.Optional;
 public class SettingService {
     private final SettingRepository settingRepository;
     private final TelegramService telegramService;
-    public SettingService(SettingRepository settingRepository) {
+    public SettingService(SettingRepository settingRepository, TelegramService telegramService) {
         this.settingRepository = settingRepository;
-        this.telegramService = new TelegramService();
+        this.telegramService = telegramService;
     }
     public void saveSetting(String tgBotToken, double targetPrice, boolean isTargetUp, User settingOwner) throws Exception {
         Optional<Long> tgChatId = telegramService.getLatestChatId(tgBotToken);
