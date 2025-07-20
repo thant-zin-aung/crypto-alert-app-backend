@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -27,13 +28,16 @@ public class PriceCheckService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Scheduled(fixedRate = 1000)
+    @Transactional
     public void checkPriceAndNotify() {
         double currentPrice = fetchCurrentBTCPrice();
+        System.out.println(currentPrice);
         listOfSetting.forEach(setting -> {
+            System.out.println(setting.getAlertTypes().size());
             if((setting.getTargetPrice() < currentPrice && setting.isTargetUp() && !setting.isTargetHit()) ||
                     setting.getTargetPrice() > currentPrice && !setting.isTargetUp() && !setting.isTargetHit()) {
-//                sendTelegramMessage(setting.getTgBotToken(), String.valueOf(setting.getTgChatId()), currentPrice);
                 setting.getAlertTypes().forEach(alertType -> {
+                    System.out.println(alertType.getClass().getSimpleName());
                     if(alertType instanceof Telegram telegram) {
                         sendTelegramMessage(telegram.getBotToken(), String.valueOf(telegram.getChatId()), currentPrice);
                     }

@@ -7,6 +7,11 @@ import java.util.List;
 
 @Entity
 public abstract class AlertType {
+    public enum AlertTypes {
+        TELEGRAM,
+        EMAIL,
+        SMS
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int aid;

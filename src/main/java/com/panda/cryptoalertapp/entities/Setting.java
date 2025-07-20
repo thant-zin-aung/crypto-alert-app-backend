@@ -15,7 +15,7 @@ public class Setting {
     private boolean isTargetHit;
     @ManyToOne
     private User user;
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<AlertType> alertTypes = new ArrayList<>();
 
     public Setting() {

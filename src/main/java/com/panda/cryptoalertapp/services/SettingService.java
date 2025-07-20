@@ -1,6 +1,8 @@
 package com.panda.cryptoalertapp.services;
 
+import com.panda.cryptoalertapp.entities.AlertType;
 import com.panda.cryptoalertapp.entities.Setting;
+import com.panda.cryptoalertapp.entities.Telegram;
 import com.panda.cryptoalertapp.entities.User;
 import com.panda.cryptoalertapp.repositories.SettingRepository;
 import org.springframework.stereotype.Service;
@@ -16,12 +18,12 @@ public class SettingService {
         this.settingRepository = settingRepository;
         this.telegramService = telegramService;
     }
-    public void saveSetting(String tgBotToken, double targetPrice, boolean isTargetUp, User settingOwner) throws Exception {
-        Optional<Long> tgChatId = telegramService.getLatestChatId(tgBotToken);
-        if(tgChatId.isPresent()) {
-            settingRepository.save(new Setting(targetPrice, isTargetUp, false, settingOwner));
-        } else {
-            throw new Exception("Telegram chat id cannot be retrieved. Make sure to send at least one message to telegram bot.");
+    public void saveSetting(AlertType.AlertTypes alertType, double targetPrice, boolean isTargetUp, User settingOwner) throws Exception {
+        if(alertType == AlertType.AlertTypes.TELEGRAM ) {
+            Setting setting = new Setting(targetPrice, isTargetUp, false, settingOwner);
+            setting.addAlertType(settingOwner.getAlertTypes().stream().filter(alert -> alert instanceof Telegram).findFirst().get());
+            settingRepository.save(setting);
+
         }
     }
     public void updateSetting(Setting setting) {
